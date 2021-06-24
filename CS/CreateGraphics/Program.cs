@@ -22,7 +22,7 @@ namespace CreateGraphics {
                 using (PdfGraphics graphics = processor.CreateGraphics()) {
                     SizeF actualPageSize = PrepareGraphics(page, graphics);
                     using (Font font = new Font("Segoe UI", 20, FontStyle.Regular)) {
-                        SizeF textSize = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault);
+                        SizeF textSize = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi);
                         PointF topLeft = new PointF(0, 0);
                         PointF bottomRight = new PointF(actualPageSize.Width - textSize.Width, actualPageSize.Height - textSize.Height);
                         graphics.DrawString(text, font, textBrush, topLeft);
