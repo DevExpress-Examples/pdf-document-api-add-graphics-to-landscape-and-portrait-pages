@@ -8,7 +8,7 @@
 
 * [Program.cs](./CS/CreateGraphics/Program.cs) (VB: [Program.vb](./VB/CreateGraphics/Program.vb))
 <!-- default file list end -->
-# How to create graphics in a document with landscape and portrait page orientations
+# PDF Document API - Create Graphics in a Document with Landscape and Portrait Page Orientations
 
 
 This example shows how to add text to the top left and bottom right of a page in a document with landscape and portrait pages.
