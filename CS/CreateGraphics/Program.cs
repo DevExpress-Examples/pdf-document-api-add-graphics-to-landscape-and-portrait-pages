@@ -20,7 +20,7 @@ namespace CreateGraphics {
             for (int i = 0; i < pages.Count; i++) {
                 PdfPage page = pages[i];
                 using (PdfGraphics graphics = processor.CreateGraphics()) {
-                    SizeF actualPageSize = PrepareGraphics(page, graphics);
+                    SizeF actualPageSize = PrepareGraphics(page, graphics, DrawingDpi, DrawingDpi);
                     using (Font font = new Font("Segoe UI", 20, FontStyle.Regular)) {
                         SizeF textSize = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi);
                         PointF topLeft = new PointF(0, 0);
@@ -33,12 +33,11 @@ namespace CreateGraphics {
             }
         }
 
-        static SizeF PrepareGraphics(PdfPage page, PdfGraphics graphics) {
+        static SizeF PrepareGraphics(PdfPage page, PdfGraphics graphics, float dpiX, float dpiY) {
             PdfRectangle cropBox = page.CropBox;
-            float cropBoxWidth = (float)cropBox.Width;
-            float cropBoxHeight = (float)cropBox.Height;
-
-            switch (page.Rotate) {
+            float cropBoxWidth = ConvertFromPdfUnits((float)cropBox.Width, dpiX);
+            float cropBoxHeight = ConvertFromPdfUnits((float)cropBox.Height, dpiY);
+            switch(page.Rotate) {
                 case 90:
                     graphics.RotateTransform(-90);
                     graphics.TranslateTransform(-cropBoxHeight, 0);
@@ -53,6 +52,9 @@ namespace CreateGraphics {
                     return new SizeF(cropBoxHeight, cropBoxWidth);
             }
             return new SizeF(cropBoxWidth, cropBoxHeight);
+        }
+        static float ConvertFromPdfUnits(float pdfValue, float targetDpi) {
+            return pdfValue / 72f * targetDpi;
         }
     }
 }

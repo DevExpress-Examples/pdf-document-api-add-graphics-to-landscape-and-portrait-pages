@@ -6,7 +6,7 @@ Namespace CreateGraphics
 
     Friend Class Program
 
-        Const DrawingDpi As Single = 72F
+        Const DrawingDpi As Single = 72.0F
 
         Shared Sub Main(ByVal args As String())
             Using processor As PdfDocumentProcessor = New PdfDocumentProcessor()
@@ -24,7 +24,7 @@ Namespace CreateGraphics
             For i As Integer = 0 To pages.Count - 1
                 Dim page As PdfPage = pages(i)
                 Using graphics As PdfGraphics = processor.CreateGraphics()
-                    Dim actualPageSize As SizeF = PrepareGraphics(page, graphics)
+                    Dim actualPageSize As SizeF = PrepareGraphics(page, graphics, DrawingDpi, DrawingDpi)
                     Using font As Font = New Font("Segoe UI", 20, FontStyle.Regular)
                         Dim textSize As SizeF = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi)
                         Dim topLeft As PointF = New PointF(0, 0)
@@ -37,10 +37,10 @@ Namespace CreateGraphics
             Next
         End Sub
 
-        Private Shared Function PrepareGraphics(ByVal page As PdfPage, ByVal graphics As PdfGraphics) As SizeF
+        Private Shared Function PrepareGraphics(ByVal page As PdfPage, ByVal graphics As PdfGraphics, ByVal dpiX As Single, ByVal dpiY As Single) As SizeF
             Dim cropBox As PdfRectangle = page.CropBox
-            Dim cropBoxWidth As Single = CSng(cropBox.Width)
-            Dim cropBoxHeight As Single = CSng(cropBox.Height)
+            Dim cropBoxWidth As Single = ConvertFromPdfUnits(CSng(cropBox.Width), dpiX)
+            Dim cropBoxHeight As Single = ConvertFromPdfUnits(CSng(cropBox.Height), dpiY)
             Select Case page.Rotate
                 Case 90
                     graphics.RotateTransform(-90)
@@ -55,8 +55,10 @@ Namespace CreateGraphics
                     graphics.TranslateTransform(0, -cropBoxWidth)
                     Return New SizeF(cropBoxHeight, cropBoxWidth)
             End Select
-
             Return New SizeF(cropBoxWidth, cropBoxHeight)
+        End Function
+        Private Shared Function ConvertFromPdfUnits(ByVal pdfValue As Single, ByVal targetDpi As Single) As Single
+            Return pdfValue / 72.0F * targetDpi
         End Function
     End Class
 End Namespace
