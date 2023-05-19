@@ -1,6 +1,7 @@
 Imports System.Drawing
 Imports System.Collections.Generic
 Imports DevExpress.Pdf
+Imports DevExpress.Drawing
 
 Namespace CreateGraphics
 
@@ -11,7 +12,7 @@ Namespace CreateGraphics
         Shared Sub Main(ByVal args As String())
             Using processor As PdfDocumentProcessor = New PdfDocumentProcessor()
                 processor.LoadDocument("..\..\RotatedDocument.pdf")
-                Using textBrush As SolidBrush = New SolidBrush(Color.FromArgb(100, Color.Blue))
+                Using textBrush As DXSolidBrush = New DXSolidBrush(Color.FromArgb(100, Color.Blue))
                     AddGraphics(processor, "text", textBrush)
                 End Using
 
@@ -19,20 +20,19 @@ Namespace CreateGraphics
             End Using
         End Sub
 
-        Private Shared Sub AddGraphics(ByVal processor As PdfDocumentProcessor, ByVal text As String, ByVal textBrush As SolidBrush)
+        Private Shared Sub AddGraphics(ByVal processor As PdfDocumentProcessor, ByVal text As String, ByVal textBrush As DXSolidBrush)
             Dim pages As IList(Of PdfPage) = processor.Document.Pages
             For i As Integer = 0 To pages.Count - 1
                 Dim page As PdfPage = pages(i)
                 Using graphics As PdfGraphics = processor.CreateGraphics()
                     Dim actualPageSize As SizeF = PrepareGraphics(page, graphics, DrawingDpi, DrawingDpi)
-                    Using font As Font = New Font("Segoe UI", 20, FontStyle.Regular)
-                        Dim textSize As SizeF = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi)
-                        Dim topLeft As PointF = New PointF(0, 0)
-                        Dim bottomRight As PointF = New PointF(actualPageSize.Width - textSize.Width, actualPageSize.Height - textSize.Height)
-                        graphics.DrawString(text, font, textBrush, topLeft)
-                        graphics.DrawString(text, font, textBrush, bottomRight)
-                        graphics.AddToPageForeground(page, DrawingDpi, DrawingDpi)
-                    End Using
+                    Dim font As DXFont = New DXFont("Segoe UI", 20, DXFontStyle.Regular)
+                    Dim textSize As SizeF = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi)
+                    Dim topLeft As PointF = New PointF(0, 0)
+                    Dim bottomRight As PointF = New PointF(actualPageSize.Width - textSize.Width, actualPageSize.Height - textSize.Height)
+                    graphics.DrawString(text, font, textBrush, topLeft)
+                    graphics.DrawString(text, font, textBrush, bottomRight)
+                    graphics.AddToPageForeground(page, DrawingDpi, DrawingDpi)
                 End Using
             Next
         End Sub

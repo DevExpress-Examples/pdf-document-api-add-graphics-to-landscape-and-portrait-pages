@@ -1,43 +1,52 @@
 ﻿using System.Drawing;
 using System.Collections.Generic;
 using DevExpress.Pdf;
+using DevExpress.Drawing;
 
-namespace CreateGraphics {
-    class Program {
+namespace CreateGraphics
+{
+    class Program
+    {
         const float DrawingDpi = 72f;
 
-        static void Main(string[] args) {
-            using (PdfDocumentProcessor processor = new PdfDocumentProcessor()) {
+        static void Main(string[] args)
+        {
+            using (PdfDocumentProcessor processor = new PdfDocumentProcessor())
+            {
                 processor.LoadDocument("..\\..\\RotatedDocument.pdf");
-                using (SolidBrush textBrush = new SolidBrush(Color.FromArgb(100, Color.Blue)))
+                using (DXSolidBrush textBrush = new DXSolidBrush(Color.FromArgb(100, Color.Blue)))
                     AddGraphics(processor, "text", textBrush);
                 processor.SaveDocument("..\\..\\RotatedDocumentWithGraphics.pdf");
             }
         }
 
-        static void AddGraphics(PdfDocumentProcessor processor, string text, SolidBrush textBrush) {
+        static void AddGraphics(PdfDocumentProcessor processor, string text, DXSolidBrush textBrush)
+        {
             IList<PdfPage> pages = processor.Document.Pages;
-            for (int i = 0; i < pages.Count; i++) {
+            for (int i = 0; i < pages.Count; i++)
+            {
                 PdfPage page = pages[i];
-                using (PdfGraphics graphics = processor.CreateGraphics()) {
+                using (PdfGraphics graphics = processor.CreateGraphics())
+                {
                     SizeF actualPageSize = PrepareGraphics(page, graphics, DrawingDpi, DrawingDpi);
-                    using (Font font = new Font("Segoe UI", 20, FontStyle.Regular)) {
-                        SizeF textSize = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi);
-                        PointF topLeft = new PointF(0, 0);
-                        PointF bottomRight = new PointF(actualPageSize.Width - textSize.Width, actualPageSize.Height - textSize.Height);
-                        graphics.DrawString(text, font, textBrush, topLeft);
-                        graphics.DrawString(text, font, textBrush, bottomRight);
-                        graphics.AddToPageForeground(page, DrawingDpi, DrawingDpi);
-                    }
+                    DXFont font = new DXFont("Segoe UI", 20, DXFontStyle.Regular);
+                    SizeF textSize = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi);
+                    PointF topLeft = new PointF(0, 0);
+                    PointF bottomRight = new PointF(actualPageSize.Width - textSize.Width, actualPageSize.Height - textSize.Height);
+                    graphics.DrawString(text, font, textBrush, topLeft);
+                    graphics.DrawString(text, font, textBrush, bottomRight);
+                    graphics.AddToPageForeground(page, DrawingDpi, DrawingDpi);
                 }
             }
         }
 
-        static SizeF PrepareGraphics(PdfPage page, PdfGraphics graphics, float dpiX, float dpiY) {
+        static SizeF PrepareGraphics(PdfPage page, PdfGraphics graphics, float dpiX, float dpiY)
+        {
             PdfRectangle cropBox = page.CropBox;
             float cropBoxWidth = ConvertFromPdfUnits((float)cropBox.Width, dpiX);
             float cropBoxHeight = ConvertFromPdfUnits((float)cropBox.Height, dpiY);
-            switch(page.Rotate) {
+            switch (page.Rotate)
+            {
                 case 90:
                     graphics.RotateTransform(-90);
                     graphics.TranslateTransform(-cropBoxHeight, 0);
@@ -53,7 +62,8 @@ namespace CreateGraphics {
             }
             return new SizeF(cropBoxWidth, cropBoxHeight);
         }
-        static float ConvertFromPdfUnits(float pdfValue, float targetDpi) {
+        static float ConvertFromPdfUnits(float pdfValue, float targetDpi)
+        {
             return pdfValue / 72f * targetDpi;
         }
     }
