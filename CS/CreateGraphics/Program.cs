@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DevExpress.Pdf;
 using DevExpress.Drawing;
+using System.Diagnostics;
 
 namespace CreateGraphics
 {
@@ -13,11 +14,12 @@ namespace CreateGraphics
         {
             using (PdfDocumentProcessor processor = new PdfDocumentProcessor())
             {
-                processor.LoadDocument("..\\..\\RotatedDocument.pdf");
+                processor.LoadDocument("..\\..\\..\\RotatedDocument.pdf");
                 using (DXSolidBrush textBrush = new DXSolidBrush(Color.FromArgb(100, Color.Blue)))
                     AddGraphics(processor, "text", textBrush);
-                processor.SaveDocument("..\\..\\RotatedDocumentWithGraphics.pdf");
+                processor.SaveDocument("..\\..\\..\\RotatedDocumentWithGraphics.pdf");
             }
+            Process.Start(new ProcessStartInfo("..\\..\\..\\RotatedDocumentWithGraphics.pdf") { UseShellExecute = true });
         }
 
         static void AddGraphics(PdfDocumentProcessor processor, string text, DXSolidBrush textBrush)

@@ -1,7 +1,6 @@
 Imports System.Drawing
-Imports System.Collections.Generic
-Imports DevExpress.Pdf
 Imports DevExpress.Drawing
+Imports DevExpress.Pdf
 
 Namespace CreateGraphics
 
@@ -11,13 +10,14 @@ Namespace CreateGraphics
 
         Shared Sub Main(ByVal args As String())
             Using processor As PdfDocumentProcessor = New PdfDocumentProcessor()
-                processor.LoadDocument("..\..\RotatedDocument.pdf")
+                processor.LoadDocument("..\..\..\RotatedDocument.pdf")
                 Using textBrush As DXSolidBrush = New DXSolidBrush(Color.FromArgb(100, Color.Blue))
                     AddGraphics(processor, "text", textBrush)
                 End Using
 
-                processor.SaveDocument("..\..\RotatedDocumentWithGraphics.pdf")
+                processor.SaveDocument("..\..\..\RotatedDocumentWithGraphics.pdf")
             End Using
+            Process.Start(New ProcessStartInfo("..\..\..\RotatedDocumentWithGraphics.pdf") With {.UseShellExecute = True})
         End Sub
 
         Private Shared Sub AddGraphics(ByVal processor As PdfDocumentProcessor, ByVal text As String, ByVal textBrush As DXSolidBrush)
