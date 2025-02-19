@@ -4,23 +4,29 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 [![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
 <!-- default badges end -->
-<!-- default file list -->
-*Files to look at*:
 
-* [Program.cs](./CS/CreateGraphics/Program.cs) (VB: [Program.vb](./VB/CreateGraphics/Program.vb))
-<!-- default file list end -->
 # PDF Document API - Create Graphics in a Document with Landscape and Portrait Page Orientations
-
 
 This example shows how to add text to the top left and bottom right of a page in a document with landscape and portrait pages.
 
+>[!IMPORTANT]
+> You need a license for the [DevExpress Office File API Subscription](https://www.devexpress.com/products/net/office-file-api/) or [DevExpress Universal Subscription](https://www.devexpress.com/subscriptions/universal.xml) to use this library in production code.
 
-<h3>Description</h3>
+## Implementation Details
 
-PDF graphics represented by an instance of the&nbsp;<a href="https://documentation.devexpress.com/#CoreLibraries/clsDevExpressPdfPdfGraphicstopic">PdfGraphics</a> class. To create graphics, call the&nbsp;<a href="https://documentation.devexpress.com/#DocumentServer/DevExpressPdfPdfDocumentProcessor_CreateGraphicstopic">PdfDocumentProcessor.CreateGraphics</a> method. To access <strong>PdfGraphics</strong>, you need to reference the<strong> DevExpress.Pdf.Drawing</strong> assembly.<br><br>To draw text on a page, call the <a href="https://documentation.devexpress.com/#CoreLibraries/DevExpressPdfPdfGraphics_DrawStringtopic">PdfGraphics.DrawString</a> method with specified text, font, brush and location.<br>To add graphics to a page foreground, call the <a href="https://documentation.devexpress.com/#CoreLibraries/DevExpressPdfPdfGraphics_AddToPageForegroundtopic">PdfGraphics.AddToPageForeground</a> method.
+The [PdfGraphics](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfGraphics) class allows you to draw graphics content in PDF. To create graphics, call the [PdfDocumentProcessor.CreateGraphics](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.CreateGraphics) method.
 
-<br/>
+To draw text on a page, call the [PdfGraphics.DrawString](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfGraphics.DrawString.overloads) method with specified text, font, brush and location.
 
+To add graphics to a page foreground, call the [AddToPageForeground](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfGraphics.AddToPageForeground.overloads) method.
+
+## Files to Review
+
+* [Program.cs](./CS/CreateGraphics/Program.cs) (VB: [Program.vb](./VB/CreateGraphics/Program.vb))
+
+## Documentation
+
+* [PDF Graphics API](https://docs.devexpress.com/OfficeFileAPI/119009/pdf-document-api/pdf-graphics)
 
 <!-- feedback -->
 ## Does this example address your development requirements/objectives?
