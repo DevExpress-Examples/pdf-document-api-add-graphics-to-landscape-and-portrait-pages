@@ -1,17 +1,20 @@
-﻿Imports System.Drawing
+Imports System.Drawing
 Imports System.Collections.Generic
 Imports DevExpress.Pdf
 
 Namespace CreateGraphics
-    Friend Class Program
-        Private Const DrawingDpi As Single = 72F
 
-        Shared Sub Main(ByVal args() As String)
-            Using processor As New PdfDocumentProcessor()
+    Friend Class Program
+
+        Const DrawingDpi As Single = 72F
+
+        Shared Sub Main(ByVal args As String())
+            Using processor As PdfDocumentProcessor = New PdfDocumentProcessor()
                 processor.LoadDocument("..\..\RotatedDocument.pdf")
-                Using textBrush As New SolidBrush(Color.FromArgb(100, Color.Blue))
+                Using textBrush As SolidBrush = New SolidBrush(Color.FromArgb(100, Color.Blue))
                     AddGraphics(processor, "text", textBrush)
                 End Using
+
                 processor.SaveDocument("..\..\RotatedDocumentWithGraphics.pdf")
             End Using
         End Sub
@@ -22,16 +25,16 @@ Namespace CreateGraphics
                 Dim page As PdfPage = pages(i)
                 Using graphics As PdfGraphics = processor.CreateGraphics()
                     Dim actualPageSize As SizeF = PrepareGraphics(page, graphics, DrawingDpi, DrawingDpi)
-                    Using font As New Font("Segoe UI", 20, FontStyle.Regular)
+                    Using font As Font = New Font("Segoe UI", 20, FontStyle.Regular)
                         Dim textSize As SizeF = graphics.MeasureString(text, font, PdfStringFormat.GenericDefault, DrawingDpi, DrawingDpi)
-                        Dim topLeft As New PointF(0, 0)
-                        Dim bottomRight As New PointF(actualPageSize.Width - textSize.Width, actualPageSize.Height - textSize.Height)
+                        Dim topLeft As PointF = New PointF(0, 0)
+                        Dim bottomRight As PointF = New PointF(actualPageSize.Width - textSize.Width, actualPageSize.Height - textSize.Height)
                         graphics.DrawString(text, font, textBrush, topLeft)
                         graphics.DrawString(text, font, textBrush, bottomRight)
                         graphics.AddToPageForeground(page, DrawingDpi, DrawingDpi)
                     End Using
                 End Using
-            Next i
+            Next
         End Sub
 
         Private Shared Function PrepareGraphics(ByVal page As PdfPage, ByVal graphics As PdfGraphics, ByVal dpiX As Single, ByVal dpiY As Single) As SizeF
@@ -52,8 +55,10 @@ Namespace CreateGraphics
                     graphics.TranslateTransform(0, -cropBoxWidth)
                     Return New SizeF(cropBoxHeight, cropBoxWidth)
             End Select
+
             Return New SizeF(cropBoxWidth, cropBoxHeight)
         End Function
+
         Private Shared Function ConvertFromPdfUnits(ByVal pdfValue As Single, ByVal targetDpi As Single) As Single
             Return pdfValue / 72F * targetDpi
         End Function
